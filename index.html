@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year 2026</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background-color:  pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.card {
+  position: relative;
+  background-color: yellowgreen;
+  width: 360px;
+  padding: 25px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+
+h1 {
+  color: #c31432;
+  margin: 10px 0;
+}
+
+.balloons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.balloon {
+  width: 45px;
+  height: 60px;
+  background: radial-gradient(circle at top, #ff5f6d, #c31432);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  width: 2px;
+  height: 20px;
+  background: #555;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes floatUp {
+  to { transform: translateY(-200px); opacity: 0; }
+}
+
+@keyframes floatIn {
+  from { transform: translateY(200px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.santa {
+  width: 120px;
+  position: relative;
+  bottom: 0;
+  border-radius: 20px;
+}
+
+/* ===== WALK STEPS ===== */
+@keyframes walkSteps {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(15px); }
+  40% { transform: translateX(30px); }
+  60% { transform: translateX(45px); }
+  80% { transform: translateX(60px); }
+  100% { transform: translateX(75px); }
+}
+
+button {
+  background: #c31432;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.snow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, white, transparent),
+    radial-gradient(2px 2px at 40px 70px, white, transparent);
+  background-size: 200px 200px;
+  animation: snowFall 10s linear infinite;
+}
+
+@keyframes snowFall { to { background-position: 0 1000px; } }
+
+#fireworks {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+<div class="snow"></div>
+
+<div class="card">
+  <img src="santa.jpg!w700wp" class="santa" id="santa" alt="Santa">
+
+  <h1>Happy New Year</h1>
+
+  <div class="balloons">
+    <span class="balloon">2</span>
+    <span class="balloon">0</span>
+    <span class="balloon">2</span>
+    <span class="balloon" id="oldFive">5</span>
+    <span class="balloon hidden" id="newSix">6</span>
+  </div>
+
+  <p id="wish">Wishing you happiness and success 🎉</p>
+  <button onclick="changeYear()">Celebrate 🎆</button>
+</div>
+
+<script>
+function changeYear() {
+  const santa = document.getElementById("santa");
+  const five = document.getElementById("oldFive");
+  const six = document.getElementById("newSix");
+  const wish = document.getElementById("wish");
+
+  // 🎅 Santa walks in steps to 5
+  santa.style.animation = "walkSteps 2s steps(5) forwards";
+
+  // Remove 5
+  setTimeout(() => {
+    five.style.animation = "floatUp 1.5s forwards";
+  }, 2000);
+
+  setTimeout(() => { five.style.display = "none"; }, 3500);
+
+  // Santa comes back in steps
+  setTimeout(() => {
+    santa.style.animation = "walkSteps 2s steps(5) reverse forwards";
+  }, 3800);
+
+  // Add 6
+  setTimeout(() => {
+    six.classList.remove("hidden");
+    six.style.animation = "floatIn 1.5s forwards";
+    wish.textContent = "Welcome 2026! 🎅🎆";
+  }, 5800);
+}
+
+/* FIREWORKS */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+function firework() {
+  ctx.fillStyle = `hsl(${Math.random()*360},100%,60%)`;
+  ctx.beginPath();
+  ctx.arc(Math.random()*canvas.width,
+          Math.random()*canvas.height/2,
+          Math.random()*3+1,0,Math.PI*2);
+  ctx.fill();
+}
+
+(function animate(){
+  ctx.fillStyle="rgba(0,0,0,0.15)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  firework();
+  requestAnimationFrame(animate);
+})();
+</script>
+
+</body>
+</html>
